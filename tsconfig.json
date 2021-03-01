@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "target": "esnext",
+      "resolveJsonModule": true,
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "declaration": true,
+      "sourceMap": true,
+      "outDir": "lib",
+      "baseUrl": "./",
+      "types": []
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules"]
+  }
+  
