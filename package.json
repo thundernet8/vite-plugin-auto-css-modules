@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-auto-css-modules",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "repository": "git@github.com:thundernet8/vite-plugin-auto-css-modules.git",
