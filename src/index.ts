@@ -1,5 +1,5 @@
 import { Plugin } from "vite";
-import babel, { NodePath } from "@babel/core";
+import { transformSync, NodePath } from "@babel/core";
 import { ParserPlugin } from "@babel/parser";
 import { ImportDeclaration } from "@babel/types";
 
@@ -39,7 +39,7 @@ function transform(
   if (/\.tsx?$/.test(file)) {
     parsePlugins.push("typescript");
   }
-  const result = babel.transformSync(code, {
+  const result = transformSync(code, {
     configFile: false,
     parserOpts: {
       sourceType: "module",
