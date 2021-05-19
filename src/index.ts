@@ -1,7 +1,8 @@
-import { Plugin } from "vite";
-import { transformSync, NodePath } from "@babel/core";
-import { ParserPlugin } from "@babel/parser";
-import { ImportDeclaration } from "@babel/types";
+import { Plugin } from 'vite';
+import { transformSync, NodePath } from '@babel/core';
+import { ParserPlugin } from '@babel/parser';
+import { ImportDeclaration } from '@babel/types';
+import * as fs from 'fs';
 
 function autoCSSModulePlugin() {
   return () => {
@@ -22,8 +23,8 @@ function autoCSSModulePlugin() {
             const cssFile = node.source.value;
             node.source.value =
               cssFile +
-              (cssFile.indexOf("?") > -1 ? "&" : "?") +
-              ".module.styl";
+              (cssFile.indexOf('?') > -1 ? '&' : '?') +
+              '.module.styl';
           }
         },
       },
@@ -35,14 +36,14 @@ function transform(
   code: string,
   { sourceMap, file }
 ): { code: string; map?: any } {
-  const parsePlugins: ParserPlugin[] = ["jsx"];
+  const parsePlugins: ParserPlugin[] = ['jsx'];
   if (/\.tsx?$/.test(file)) {
-    parsePlugins.push("typescript");
+    parsePlugins.push('typescript');
   }
   const result = transformSync(code, {
     configFile: false,
     parserOpts: {
-      sourceType: "module",
+      sourceType: 'module',
       allowAwaitOutsideFunction: true,
       plugins: parsePlugins,
     },
@@ -59,7 +60,7 @@ function transform(
 }
 
 export default function viteAutoCSSModulesPlugin(): Plugin {
-  const name = "vite-plugin-auto-css-modules";
+  const name = 'vite-plugin-auto-css-modules';
   return {
     name,
     transform(code, id) {
@@ -78,6 +79,19 @@ export default function viteAutoCSSModulesPlugin(): Plugin {
         }
       }
       return undefined;
+    },
+    load(id) {
+      if (/(\?|&)\.module\.styl$/.test(id)) {
+        return new Promise((resolve, reject) => {
+          fs.readFile(id.split('?')[0], 'utf-8', (err, contents) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(contents);
+            }
+          });
+        });
+      }
     },
   };
 }
